@@ -425,7 +425,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Lenovo\\Downloads\\Naukri_Clone_15June\\Naukri-Clone_20May\\backend\\generated\\prisma",
+      "value": "c:\\Users\\asus\\Desktop\\Hiring Web\\backend\\backend\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -439,7 +439,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Lenovo\\Downloads\\Naukri_Clone_15June\\Naukri-Clone_20May\\backend\\prisma\\schema.prisma",
+    "sourceFilePath": "c:\\Users\\asus\\Desktop\\Hiring Web\\backend\\backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -453,6 +453,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

@@ -98,13 +98,13 @@ app.post('/reset-password', async (req, res) => {
 });
 
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'info@gauravmudgal.com',
-    pass: 'c5NdkovF=F8=',
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'info@gauravmudgal.com',
+//     pass: 'c5NdkovF=F8=',
+//   },
+// });
 
 app.post('/update-key-skills', authorization, async (req, res) => {
   const userID = req.user.userId;
@@ -748,83 +748,83 @@ app.post('/check-employer-email', async (req, res) => {
   }
 });
 
-app.post('/forgot-password', async (req, res) => {
-  const { email, accountType } = req.body;
+// app.post('/forgot-password', async (req, res) => {
+//   const { email, accountType } = req.body;
 
-  try {
-    let user;
+//   try {
+//     let user;
 
-    // Validate accountType
-    if (accountType === "user") {
-      user = await prisma.user.findUnique({
-        where: { email },
-      });
-    } else if (accountType === "employer") {
-      user = await prisma.employer.findFirst({
-        where: {
-          OR: [
-            { loginEmail: email },
-            { officialEmail: email }
-          ]
-        }
-      });
-    } else {
-      return res.status(400).json({ message: "Invalid account type" });
-    }
+//     // Validate accountType
+//     if (accountType === "user") {
+//       user = await prisma.user.findUnique({
+//         where: { email },
+//       });
+//     } else if (accountType === "employer") {
+//       user = await prisma.employer.findFirst({
+//         where: {
+//           OR: [
+//             { loginEmail: email },
+//             { officialEmail: email }
+//           ]
+//         }
+//       });
+//     } else {
+//       return res.status(400).json({ message: "Invalid account type" });
+//     }
 
-    if (!user) {
-      return res.status(404).json({ message: 'Email not found' });
-    }
+//     if (!user) {
+//       return res.status(404).json({ message: 'Email not found' });
+//     }
 
-    // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = Date.now() + 5 * 60 * 1000;
+//     // Generate OTP
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//     const expiresAt = Date.now() + 5 * 60 * 1000;
 
-    otpStore[email] = { otp, expiresAt, verified: false };
+//     otpStore[email] = { otp, expiresAt, verified: false };
 
-    // Send OTP email
-    await transporter.sendMail({
-      from: 'info@gauravmudgal.com',
-      to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
-    });
+//     // Send OTP email
+//     await transporter.sendMail({
+//       from: 'info@gauravmudgal.com',
+//       to: email,
+//       subject: 'Your OTP Code',
+//       text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
+//     });
 
-    return res.status(200).json({ message: 'OTP sent to your email' });
-  } catch (error) {
-    console.error('Error in forgot-password:', error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-});
+//     return res.status(200).json({ message: 'OTP sent to your email' });
+//   } catch (error) {
+//     console.error('Error in forgot-password:', error);
+//     return res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 
-app.post('/send-otp', async (req, res) => {
-  console.log("inside send otp api")
-  const { email } = req.body;
+// app.post('/send-otp', async (req, res) => {
+//   console.log("inside send otp api")
+//   const { email } = req.body;
 
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ message: 'Invalid email address' });
-  }
+//   if (!email || !email.includes('@')) {
+//     return res.status(400).json({ message: 'Invalid email address' });
+//   }
 
-  const otp = Math.floor(1000 + Math.random() * 9000).toString();
-  const expiresAt = Date.now() + 5 * 60 * 1000;
+//   const otp = Math.floor(1000 + Math.random() * 9000).toString();
+//   const expiresAt = Date.now() + 5 * 60 * 1000;
 
-  otpStore[email] = { otp, expiresAt, verified: false };
+//   otpStore[email] = { otp, expiresAt, verified: false };
 
-  try {
-    await transporter.sendMail({
-      from: 'info@gauravmudgal.com',
-      to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
-    });
+//   try {
+//     await transporter.sendMail({
+//       from: 'info@gauravmudgal.com',
+//       to: email,
+//       subject: 'Your OTP Code',
+//       text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
+//     });
 
-    res.status(200).json({ message: 'OTP sent to email' });
-  } catch (err) {
-    console.error('Email sending failed:', err);
-    res.status(500).json({ message: 'Failed to send OTP', error: err.message });
-  }
-});
+//     res.status(200).json({ message: 'OTP sent to email' });
+//   } catch (err) {
+//     console.error('Email sending failed:', err);
+//     res.status(500).json({ message: 'Failed to send OTP', error: err.message });
+//   }
+// });
 app.post('/send-callback-email', async (req, res) => {
   const { fullname, email, mobile, hiringType, designation, companyname, city } = req.body;
   try {
@@ -853,31 +853,31 @@ app.post('/send-callback-email', async (req, res) => {
   }
 });
 
-app.post('/verify-otp', (req, res) => {
-  const { email, otp, accountType } = req.body;
-  const record = otpStore[email];
+// app.post('/verify-otp', (req, res) => {
+//   const { email, otp, accountType } = req.body;
+//   const record = otpStore[email];
 
 
-  console.log(`[OTP Verify] Email: ${email}`);
-  console.log(`[OTP Verify] Received OTP: ${otp}`);
-  console.log(`[OTP Verify] Stored OTP: ${record?.otp}`);
+//   console.log(`[OTP Verify] Email: ${email}`);
+//   console.log(`[OTP Verify] Received OTP: ${otp}`);
+//   console.log(`[OTP Verify] Stored OTP: ${record?.otp}`);
 
-  if (!record) {
-    return res.status(400).json({ message: 'No OTP found for this email' });
-  }
+//   if (!record) {
+//     return res.status(400).json({ message: 'No OTP found for this email' });
+//   }
 
-  if (Date.now() > record.expiresAt) {
-    delete otpStore[email];
-    return res.status(400).json({ message: 'OTP expired' });
-  }
+//   if (Date.now() > record.expiresAt) {
+//     delete otpStore[email];
+//     return res.status(400).json({ message: 'OTP expired' });
+//   }
 
-  if (record.otp !== otp.toString()) {
-    return res.status(400).json({ message: 'Invalid OTP' });
-  }
+//   if (record.otp !== otp.toString()) {
+//     return res.status(400).json({ message: 'Invalid OTP' });
+//   }
 
-  otpStore[email].verified = true;
-  return res.status(200).json({ message: 'OTP verified successfully' });
-});
+//   otpStore[email].verified = true;
+//   return res.status(200).json({ message: 'OTP verified successfully' });
+// });
 
 app.patch('/setadmin-password', async (req, res) => {
   const { newpassword, email } = req.body
@@ -980,7 +980,7 @@ app.post('/employer-registration', async (req, res) => {
     });
 
     // Step 4: Delete OTP from store
-    delete otpStore[officialEmail]; // or use loginEmail if that's your key
+    // delete otpStore[officialEmail]; // or use loginEmail if that's your key
 
     // Step 5: Send response
     res.send({
@@ -1041,12 +1041,12 @@ app.post('/register', async (req, res) => {
       });
     }
 
-    if (!otpStore[email] || !otpStore[email].verified) {
-      return res.status(400).send({
-        success: false,
-        message: "Please verify OTP before registration",
-      });
-    }
+    // if (!otpStore[email] || !otpStore[email].verified) {
+    //   return res.status(400).send({
+    //     success: false,
+    //     message: "Please verify OTP before registration",
+    //   });
+    // }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -1060,7 +1060,7 @@ app.post('/register', async (req, res) => {
       },
     });
 
-    delete otpStore[email];
+    // delete otpStore[email];
 
     res.send({
       success: true,
